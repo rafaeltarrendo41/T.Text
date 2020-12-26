@@ -13,7 +13,7 @@ public class ServerApp {
     
     public static void main(String[] args){
         PresencasServer ps = new PresencasServer();
-        
+        ps.criarPresencas();
     }
     
 }

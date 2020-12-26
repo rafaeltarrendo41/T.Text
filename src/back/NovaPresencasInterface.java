@@ -7,12 +7,11 @@ package back;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Vector;
 
 /**
  *
  * @author Rafael
  */
-public interface PresencasInterface extends Remote{
-    public Vector<String> getPresencas(String IPAdress, NovaPresencasInterface c1) throws RemoteException;
+public interface NovaPresencasInterface extends Remote{
+    public void setNovaPresenca(String IPAdress) throws RemoteException;
 }
