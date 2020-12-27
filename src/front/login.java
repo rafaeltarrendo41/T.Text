@@ -184,4 +184,6 @@ public class login extends javax.swing.JPanel {
     private javax.swing.JTextField jnickname;
     private java.awt.Panel panel1;
     // End of variables declaration//GEN-END:variables
+
+
 }
