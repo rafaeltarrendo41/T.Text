@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package back;
+package servidor;
 import java.lang.SecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -16,7 +16,8 @@ public class PresencasServer {
     String SERVICE_NAME = "/PresencasRemote";
     
     private void bindRMI(Presencas presenca) throws RemoteException{
-        System.getProperties().put("java.security.policy", "./server.policy");
+        System.getProperties().put("java.security.policy", "file:C:/Users/Rafael/Desktop/3º Ano/SD/T.Text/src/back/server.policy");
+      
         
         if(System.getSecurityManager() == null){
             System.setSecurityManager(new SecurityManager());
@@ -30,6 +31,7 @@ public class PresencasServer {
         
         try{
             LocateRegistry.getRegistry("127.0.0.1", 1099).rebind(SERVICE_NAME, presenca);
+            System.out.println("Servidor a correr!");
         }catch(RemoteException e){
             System.out.println("Registo nao encontrado!");
         }

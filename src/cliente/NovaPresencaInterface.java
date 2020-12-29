@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package back;
+package cliente;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -12,6 +12,6 @@ import java.rmi.RemoteException;
  *
  * @author Rafael
  */
-public interface NovaPresencasInterface extends Remote{
+public interface NovaPresencaInterface extends Remote{
     public void setNovaPresenca(String IPAdress) throws RemoteException;
 }
