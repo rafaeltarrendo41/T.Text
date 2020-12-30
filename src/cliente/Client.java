@@ -5,11 +5,15 @@
  */
 package cliente;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
+import servidor.PresencasServer;
 
 /**
  *
@@ -21,8 +25,10 @@ public class Client {
     private int porta;
     private ArrayList<Client> listaAmigos;
     private ArrayList<Client> pedidosAprovacao;
+    String SERVICE_NAME= "/PresencasRemote";
+    PresencaInterface presenca = null;
 
-    public Client(String nickname, String email, String curso, String IPAdress, int porta, ArrayList<Client> listaAmigos, ArrayList<Client> pedidosAprovacao) {
+    public Client(String nickname, String email, String curso, String IPAdress, int porta) {
         this.nickname = nickname;
         this.email = email;
         this.curso = curso;
@@ -90,6 +96,24 @@ public class Client {
 
     public void setPedidosAprovacao(ArrayList<Client> pedidosAprovacao) {
         this.pedidosAprovacao = pedidosAprovacao;
+    }
+    
+    public void putPresencas(String ip) throws UnknownHostException, NotBoundException{
+        try{
+            NovaPresencaInterface c1 = new NovaPresenca();
+            
+            presenca = (PresencaInterface) LocateRegistry.getRegistry("127.0.0.1").lookup(SERVICE_NAME);
+            //String ip = InetAddress.getLocalHost().getHostAddress();
+            Vector<String> presencasLista = presenca.getPresencas(ip, c1);
+            
+            Iterator<String> it = presencasLista.iterator();
+            while(it.hasNext()){
+                System.out.println(it.next());
+            }
+        } catch(RemoteException e){
+            System.err.println("Erro");
+            e.printStackTrace();
+        }
     }
 
     @Override

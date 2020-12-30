@@ -12,6 +12,6 @@ import java.rmi.RemoteException;
  *
  * @author Rafael
  */
-public interface NovaPresencasInterface extends Remote{
+public interface NovaPresencaInterface extends Remote{
     public void setNovaPresenca(String IPAdress) throws RemoteException;
 }

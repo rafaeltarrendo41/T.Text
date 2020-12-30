@@ -5,7 +5,6 @@
  */
 package cliente;
 
-import cliente.NovaPresencaInterface;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Vector;

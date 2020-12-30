@@ -13,6 +13,6 @@ import java.util.Vector;
  *
  * @author Rafael
  */
-public interface PresencasInterface extends Remote{
-    public Vector<String> getPresencas(String IPAdress, NovaPresencasInterface c1) throws RemoteException;
+public interface PresencaInterface extends Remote{
+    public Vector<String> getPresencas(String IPAdress, NovaPresencaInterface c1) throws RemoteException;
 }

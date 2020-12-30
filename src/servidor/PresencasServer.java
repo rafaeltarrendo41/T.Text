@@ -16,7 +16,7 @@ public class PresencasServer {
     String SERVICE_NAME = "/PresencasRemote";
     
     private void bindRMI(Presencas presenca) throws RemoteException{
-        System.getProperties().put("java.security.policy", "file:C:/Users/Rafael/Desktop/3º Ano/SD/T.Text/src/back/server.policy");
+        System.getProperties().put("java.security.policy", "file:C:/Users/Rafael/Desktop/3º Ano/SD/T.Text/src/servidor/server.policy");
       
         
         if(System.getSecurityManager() == null){

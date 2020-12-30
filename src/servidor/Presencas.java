@@ -16,14 +16,14 @@ import java.util.Vector;
  *
  * @author Rafael
  */
-public class Presencas extends UnicastRemoteObject implements PresencasInterface{
+public class Presencas extends UnicastRemoteObject implements PresencaInterface{
     private Hashtable<String, IPInfo> presentIPs = new Hashtable<String, IPInfo>();
     
     public Presencas() throws RemoteException{
         super();
     }
     
-    public Vector<String> getPresencas(String IPAdress, NovaPresencasInterface c1) throws RemoteException {
+    public Vector<String> getPresencas(String IPAdress, NovaPresencaInterface c1) throws RemoteException {
         long horaActual = new Date().getTime();
         
         synchronized(this){
@@ -68,9 +68,9 @@ public class Presencas extends UnicastRemoteObject implements PresencasInterface
 class IPInfo{
     private String ip;
     private long ultimaUtilizacao;
-    private NovaPresencasInterface c1;
+    private NovaPresencaInterface c1;
     
-    public IPInfo(String ip, long ultimaUtilizacao, NovaPresencasInterface c1){
+    public IPInfo(String ip, long ultimaUtilizacao, NovaPresencaInterface c1){
         this.ip = ip;
         this.ultimaUtilizacao = ultimaUtilizacao;
         this.c1 = c1;
@@ -80,7 +80,7 @@ class IPInfo{
         return this.ip;
     }
     
-    public NovaPresencasInterface getC1(){
+    public NovaPresencaInterface getC1(){
         return this.c1;
     }
     
@@ -88,7 +88,7 @@ class IPInfo{
         this.ultimaUtilizacao = time;
     }
     
-    public void setC1(NovaPresencasInterface c1){
+    public void setC1(NovaPresencaInterface c1){
         this.c1 = c1;
     }
     

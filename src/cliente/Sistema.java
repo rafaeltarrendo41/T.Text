@@ -32,7 +32,9 @@ public class Sistema {
     public void setClienteAtual(Client clienteAtual) {
         this.clienteAtual = clienteAtual;
     }
-    
+    public void addCliente(Client c){
+        totalClients.adicionarClient(c);
+    }
     
     
 }

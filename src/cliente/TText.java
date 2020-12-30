@@ -16,8 +16,8 @@ public class TText {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-       // Sistema s = new Sistema();
-        Login l = new Login();
+        Sistema s = new Sistema();
+        Login l = new Login(s);
         l.setVisible(true);
     }
     
