@@ -48,8 +48,8 @@ public class Login extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         Jemail = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        Jcurso = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        Jcurso = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,6 +62,11 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setText("T-Text");
 
         jButton1.setText("Sair");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("Nickname:");
@@ -188,6 +193,16 @@ public class Login extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_jButton2MouseClicked
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (JOptionPane.showConfirmDialog(null,
+                "Deseja sair?",
+                "Sair",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+            sistema.terminar();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

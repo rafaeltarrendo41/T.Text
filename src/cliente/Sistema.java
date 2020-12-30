@@ -35,6 +35,9 @@ public class Sistema {
     public void addCliente(Client c){
         totalClients.adicionarClient(c);
     }
+    public void terminar() {
+        System.exit(0);
+    }
     
     
 }
