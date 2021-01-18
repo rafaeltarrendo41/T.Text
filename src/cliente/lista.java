@@ -398,7 +398,14 @@ public class lista extends javax.swing.JFrame {
                      Client cliente = new Client(s, "", "", hashtable.get(s).getIP(), hashtable.get(s).getPorta());
                      
                      sistema.getClienteAtual().inserirAmigo(cliente);
-                     sistema.getClienteAtual().removePedido(cliente);
+                     Client a = null;
+                     for(Client c: sistema.getClienteAtual().getPedidosAprovacao()){
+                         if(c.getNickname().equals(s)){
+                             a=c;
+                         }
+                     }
+                     
+                     sistema.getClienteAtual().removePedido(a);
                 }catch(Exception e){
                     e.printStackTrace();
                 }

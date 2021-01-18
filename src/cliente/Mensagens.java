@@ -5,18 +5,32 @@
  */
 package cliente;
 
+import Partilhado.IPInfo;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author catar
  */
 public class Mensagens extends javax.swing.JFrame {
     Sistema sistema;
+    ArrayList<String> contactos = new ArrayList<String>();
+    Hashtable<String, IPInfo> hashtable = new Hashtable<String, IPInfo>();
     /**
      * Creates new form Mensagens
      */
     public Mensagens(Sistema sistema) {
         this.sistema = sistema;
         initComponents();
+        contactos.addAll(sistema.getClienteAtual().getPresenca().keySet());
+         hashtable.putAll(sistema.getClienteAtual().getPresenca());
     }
 
     /**
@@ -52,6 +66,11 @@ public class Mensagens extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton2.setText("Enviar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Voltar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -119,11 +138,63 @@ public class Mensagens extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String mensagem = jTextField1.getText();
+        String nickname = sistema.getClienteAtual().getNickname();
+        String estadoMensagem = mensagem.replaceAll(" ", "&nbsp;");
+        
+        String request = "EnviarEstado" + " " + nickname + " " + estadoMensagem;
+        int numero = 0;
+        
+        for(Client cliente : sistema.getClienteAtual().getListaAmigos()){
+            try{
+                Socket ligacao = new Socket(cliente.getIPAdress(), cliente.getPorta());
+        
+                BufferedReader entrada = new BufferedReader(new InputStreamReader(ligacao.getInputStream()));
+                PrintWriter saida = new PrintWriter(ligacao.getOutputStream(), true);
+            
+                saida.println(request);
+            
+                String msg = entrada.readLine();
+                
+                if(!msg.equals("200")){
+                    JOptionPane.showMessageDialog(this, "Ocorreu um erro no envio da mensagem ao utilizador:" + cliente.getNickname());
+                }
+            
+                saida.flush();
+                entrada.close();
+                saida.close();
+                ligacao.close();
+            }catch(Exception e){
+                System.out.print(e);
+                numero++;
+            }
+        }
+        
+        //Feed feed = new Feed(nome, estado);
+        //system.getUtilizadorAtual().insereFeed(feed);
+        Mensagem mensagem1 = new Mensagem(nickname, mensagem);
+        sistema.getClienteAtual().inserirMensagem(mensagem1);
+        PreencherTabelaFeed();
+        
+        jTextArea1.setText("");
+        if(numero != 0){
+                JOptionPane.showMessageDialog(this, numero + " utilizadores não se encontram online e não receberam a mensagem");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
-
+ private void PreencherTabelaFeed(){
+       jTextArea1.selectAll();
+       jTextArea1.replaceSelection("");
+        
+        for(Mensagem feed : sistema.getClienteAtual().getMensagens()){
+            jTextArea1.setText(feed.getNickname() + ": " + feed.getMensagem() + "\n");
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

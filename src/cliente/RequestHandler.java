@@ -102,9 +102,10 @@ public class RequestHandler extends Thread{
                 String nickname = tokens.nextToken();
                 String estados = tokens.nextToken();
                 String estadoFormatado = estados.replaceAll("&nbsp;", " ");
+                Mensagem mensagem1 = new Mensagem(nickname, estadoFormatado);
                 
                 Estado estado = new Estado(nickname, estadoFormatado);
-                sistema.getClienteAtual().insereEstado(estado);
+                sistema.getClienteAtual().inserirMensagem(mensagem1);
                 
                 System.out.println(resposta);
                 out.println(resposta);

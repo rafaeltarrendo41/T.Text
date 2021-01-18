@@ -37,6 +37,7 @@ public class Client {
     String SERVICE_NAME= "/PresencasRemote";
     PresencaInterface presenca = null;
     Hashtable<String, IPInfo> presentes;
+    private ArrayList<Mensagem> mensagens;
 
     public Client(String nickname, String email, String curso, String IPAdress, int porta) {
         this.nickname = nickname;
@@ -46,8 +47,15 @@ public class Client {
         this.porta = porta;
         listaAmigos = new ArrayList<>();
         pedidosAprovacao = new ArrayList<>();
+        mensagens = new ArrayList<>();
     }
-    
+
+    public ArrayList<Mensagem> getMensagens() {
+        return mensagens;
+    }
+    public void inserirMensagem(Mensagem mensagem){
+        this.mensagens.add(mensagem);
+    }
     public Client(){
         
     }
