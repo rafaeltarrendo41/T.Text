@@ -14,12 +14,14 @@ import java.util.Date;
  */
 public class IPInfo implements Serializable{
     private String ip;
-    private long ultimaUtilizacao;
+    private int porta;
+    //private long ultimaUtilizacao;
    // private NovaPresencaInterface c1;
     
-    public IPInfo(String ip, long ultimaUtilizacao){
+    public IPInfo(String ip, int porta){
         this.ip = ip;
-        this.ultimaUtilizacao = ultimaUtilizacao;
+        this.porta = porta;
+        //this.ultimaUtilizacao = ultimaUtilizacao;
        // this.c1 = c1;
     }
     
@@ -27,20 +29,23 @@ public class IPInfo implements Serializable{
         return this.ip;
     }
     
+    public int getPorta(){
+        return this.porta;
+    }    
    
     
-    public void setUltimaUtilizacao(long time){
+    /*public void setUltimaUtilizacao(long time){
         this.ultimaUtilizacao = time;
-    }
+    }*/
     
    
     
-    public boolean tempoPassado(int timeout){
+    /*public boolean tempoPassado(int timeout){
         boolean resultado = false;
         long tempoDesdeUltimaUtilizacao = new Date().getTime() - this.ultimaUtilizacao;
         if(tempoDesdeUltimaUtilizacao >= timeout){
             resultado = true;
         }
         return resultado;
-    }
+    }*/
 }

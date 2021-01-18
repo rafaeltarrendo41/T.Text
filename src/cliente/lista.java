@@ -6,8 +6,17 @@
 package cliente;
 
 import Partilhado.IPInfo;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +32,7 @@ public class lista extends javax.swing.JFrame {
     ServidorSocket servidor = null;
     ArrayList<IPInfo> info = new ArrayList<IPInfo>();
     ArrayList<String> contactos = new ArrayList<String>();
+    Hashtable<String, IPInfo> hashtable = new Hashtable<String, IPInfo>();
     
     
     /**
@@ -33,6 +43,7 @@ public class lista extends javax.swing.JFrame {
         //Set<String> contactos = sistema.getClienteAtual().getPresenca().keySet();
         contactos.addAll(sistema.getClienteAtual().getPresenca().keySet());
         info.addAll(sistema.getClienteAtual().getPresenca().values());
+        hashtable.putAll(sistema.getClienteAtual().getPresenca());
         System.out.println(info.get(0).getIP());
         Object [] arrayConatcos = contactos.toArray();
         System.out.println(arrayConatcos.toString());
@@ -68,6 +79,8 @@ public class lista extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,6 +158,25 @@ public class lista extends javax.swing.JFrame {
         });
 
         jButton4.setText("Atualizar");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("aceita");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("recusa");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -159,19 +191,22 @@ public class lista extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))))
+                        .addGap(35, 35, 35)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3))
+                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(20, 20, 20))
         );
         jPanel1Layout.setVerticalGroup(
@@ -195,7 +230,10 @@ public class lista extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton5)
+                        .addComponent(jButton6)))
                 .addGap(41, 41, 41))
         );
 
@@ -225,12 +263,59 @@ public class lista extends javax.swing.JFrame {
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         int linha = tContacto.getSelectedRow();
         String nickname = tContacto.getModel().getValueAt(linha, 0).toString();
+        System.out.println(nickname);
+        
+        Client cliente = sistema.getClienteAtual();
+       
+        //System.out.println(cliente);
+        String pedido = "EnviarPedido" + " " + cliente.getNickname() + " " + cliente.getEmail() + " " + cliente.getCurso() +" "+ cliente.getIPAdress() + " " + String.valueOf(cliente.getPorta());   
+        for(String s : contactos){
+            if(s.equals(nickname)){
+                try{
+                    //System.out.println(hashtable.get(s).getIP());
+                    System.out.println(hashtable.get(s).getPorta());
+                    Socket ligacao = new Socket(hashtable.get(s).getIP(), hashtable.get(s).getPorta());
+                    //System.out.println(ligacao);
+                    BufferedReader entrada = new BufferedReader(new InputStreamReader(ligacao.getInputStream()));
+                    PrintWriter saida = new PrintWriter(ligacao.getOutputStream(), true);
+                    
+                    saida.println(pedido);
+                    
+                    String msg = entrada.readLine();
+                    
+                    
+                    if(!msg.equals("201")){
+                        JOptionPane.showMessageDialog(this, "Ocorreu um erro ao enviar pedido de amizade!");
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Pedido de amizade Enviado");
+                    }
+                    
+                    saida.flush();
+                    entrada.close();
+                    saida.close();
+                    ligacao.close();
+                } catch (IOException ex) {
+                    System.err.println(ex);
+                    Logger.getLogger(lista.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
         
         
-        String pedido = "EnviarPedido" + " " + sistema.getClienteAtual().getNickname();
-        
-        //for()
+       
     }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        this.revalidate();
+    }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
    /*  private void TabeleContactos(){
         DefaultTableModel tabelaModelo = (DefaultTableModel) tContacto.getModel();
@@ -268,6 +353,7 @@ private void PrencherContactos(){
     }*/
     for(String s : contactos){
         if(!sistema.getClienteAtual().getNickname().equals(s)){
+            //if(!)
             tabelaModelo.addRow(new Object[] {s});
         }
     }
@@ -278,6 +364,8 @@ private void PrencherContactos(){
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

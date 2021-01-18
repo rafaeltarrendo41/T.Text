@@ -41,7 +41,7 @@ public class ServidorSocket extends Thread{
             try{
                 Socket ligacao = servidor.accept();
                 RequestHandler handler = new RequestHandler(ligacao, sistema);
-                handler.run();
+                handler.start();
             } catch (IOException ex) {
                 Logger.getLogger(ServidorSocket.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("Erro na execucao do servidor: " + ex);

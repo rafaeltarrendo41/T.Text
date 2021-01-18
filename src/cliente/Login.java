@@ -201,7 +201,7 @@ public class Login extends javax.swing.JFrame {
                 //sistema.getClienteAtual().
                 System.out.println(sistema.getTotalClients());
                 
-                sistema.getClienteAtual().setNovaPresenca(Jnickname.getText(), jTextField1.getText(), 1099);
+                sistema.getClienteAtual().setNovaPresenca(Jnickname.getText(), jTextField1.getText(), porta);
                 lista l = new lista(sistema);
                 l.setVisible(true);
                 this.dispose();

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
 import java.net.Socket;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Rafael
  */
-public class RequestHandler {
+public class RequestHandler extends Thread{
     Socket ligacao;
     Sistema sistema;
     BufferedReader in;
@@ -39,6 +40,7 @@ public class RequestHandler {
             
     }
     
+    @Override
     public void run(){
         try{
             System.out.println("Aceitou ligacao de cliente no endereco " + ligacao.getInetAddress() + " na porta " + ligacao.getPort());
@@ -53,15 +55,20 @@ public class RequestHandler {
             if(metodo.equals("EnviarPedido")){
                 resposta = "201";
                 String nickname = tokens.nextToken();
+                String email = tokens.nextToken();
+                String curso = tokens.nextToken();
+                String IP = tokens.nextToken();
+                int porta = parseInt(tokens.nextToken());
+                Client cliente = new Client(nickname, email, curso, IP, porta);
+                System.out.println(cliente);
                 
-                for(Client cliente : sistema.getTotalClients().getListaGeralClients()){
-                    if(cliente.getNickname().equals(nickname)){
+               
                         if(!sistema.getClienteAtual().getPedidosAprovacao().contains(cliente)){
                             sistema.getClienteAtual().inserePedidos(cliente);
                         }
-                    }
-                }
-                System.out.println(resposta);
+                    
+                
+                //System.out.println(resposta);
                 out.println(resposta);
             }
             
@@ -101,7 +108,7 @@ public class RequestHandler {
             in.close();
             out.close();
             ligacao.close();
-            
+            System.out.println(sistema.getClienteAtual().getPedidosAprovacao());
             
         } catch (IOException ex) {
             Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
