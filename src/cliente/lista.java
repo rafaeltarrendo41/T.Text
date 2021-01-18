@@ -41,6 +41,7 @@ public class lista extends javax.swing.JFrame {
     public lista(Sistema sistema) {
         this.sistema = sistema;
         //Set<String> contactos = sistema.getClienteAtual().getPresenca().keySet();
+       // AtualizarDadosServidor();
         contactos.addAll(sistema.getClienteAtual().getPresenca().keySet());
         info.addAll(sistema.getClienteAtual().getPresenca().values());
         hashtable.putAll(sistema.getClienteAtual().getPresenca());
@@ -53,6 +54,8 @@ public class lista extends javax.swing.JFrame {
         initComponents();
         
         PrencherContactos();
+        PrencherPedidos();
+        PrencherAmigos();
         this.validate();
         
         
@@ -152,6 +155,11 @@ public class lista extends javax.swing.JFrame {
         jLabel3.setText("Lista de Amigos:");
 
         jButton3.setText("Enviar mensagem");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Sair");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -173,6 +181,11 @@ public class lista extends javax.swing.JFrame {
         });
 
         jButton5.setText("aceita");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -300,11 +313,11 @@ public class lista extends javax.swing.JFrame {
         Client cliente = sistema.getClienteAtual();
        
         //System.out.println(cliente);
-        String pedido = "EnviarPedido" + " " + cliente.getNickname() + " " + cliente.getEmail() + " " + cliente.getCurso() +" "+ cliente.getIPAdress() + " " + String.valueOf(cliente.getPorta());   
+        String pedido = "EnviarPedido" + " " + cliente.getNickname()   +" "+ cliente.getIPAdress() + " " + String.valueOf(cliente.getPorta());   
         for(String s : contactos){
             if(s.equals(nickname)){
                 try{
-                    //System.out.println(hashtable.get(s).getIP());
+                    System.out.println(hashtable.get(s).getIP());
                     System.out.println(hashtable.get(s).getPorta());
                     Socket ligacao = new Socket(hashtable.get(s).getIP(), hashtable.get(s).getPorta());
                     //System.out.println(ligacao);
@@ -326,6 +339,8 @@ public class lista extends javax.swing.JFrame {
                     entrada.close();
                     saida.close();
                     ligacao.close();
+                    
+                    //sistema.getClienteAtual().inserePedidos(cliente);
                 } catch (IOException ex) {
                     System.err.println(ex);
                     Logger.getLogger(lista.class.getName()).log(Level.SEVERE, null, ex);
@@ -338,7 +353,12 @@ public class lista extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-        this.revalidate();
+       // tContacto.clearSelection();
+        
+        AtualizarContactos();
+        PrencherContactos();
+        PrencherPedidos();
+        PrencherAmigos();
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -348,6 +368,55 @@ public class lista extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
+//Botão de Aceitar
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        int row = tAprov.getSelectedRow();
+        String nickname = tAprov.getModel().getValueAt(row, 0).toString();
+        
+        String pedido = "ResponderPedido" + " " + sistema.getClienteAtual().getNickname() + " " + sistema.getClienteAtual().getIPAdress()+ " " +sistema.getClienteAtual().getPorta() +" 1";
+        
+        for(String s : contactos){
+            if(s.equals(nickname)){
+                try{
+                    Socket ligacao = new Socket(hashtable.get(s).getIP(), hashtable.get(s).getPorta());
+                     BufferedReader entrada = new BufferedReader(new InputStreamReader(ligacao.getInputStream()));
+                     PrintWriter saida = new PrintWriter(ligacao.getOutputStream(), true);
+                     
+                     saida.println(pedido);
+                     
+                     String msg = entrada.readLine();
+                     
+                     if(!msg.equals("200")){
+                        JOptionPane.showMessageDialog(this, "Ocorreu um erro no envio da mensagem ao utilizador: " + s);
+                        }
+                     
+                     
+                     saida.flush();
+                     entrada.close();
+                     saida.close();
+                     ligacao.close();
+                     Client cliente = new Client(s, "", "", hashtable.get(s).getIP(), hashtable.get(s).getPorta());
+                     
+                     sistema.getClienteAtual().inserirAmigo(cliente);
+                     sistema.getClienteAtual().removePedido(cliente);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        AtualizarContactos();
+        PrencherContactos();
+        PrencherPedidos();
+        PrencherAmigos();
+        System.out.println(sistema.getClienteAtual().getListaAmigos());
+    }//GEN-LAST:event_jButton5MouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       dispose();
+       Mensagens mensagem = new Mensagens(sistema);
+       mensagem.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
    /*  private void TabeleContactos(){
         DefaultTableModel tabelaModelo = (DefaultTableModel) tContacto.getModel();
@@ -385,10 +454,50 @@ private void PrencherContactos(){
     }*/
     for(String s : contactos){
         if(!sistema.getClienteAtual().getNickname().equals(s)){
-            //if(!)
-            tabelaModelo.addRow(new Object[] {s});
+            if(amigos.isEmpty()){
+                tabelaModelo.addRow(new Object[] {s});
+            }
+            else {
+                for(Client cliente : amigos){
+                    if(!(cliente.getNickname().equals(s))){
+                        tabelaModelo.addRow(new Object[] {s});
+                    }
+                }
+            }
         }
     }
+}
+
+private void PrencherPedidos(){
+    DefaultTableModel tabelaModelo = (DefaultTableModel) tAprov.getModel();
+    tabelaModelo.setRowCount(0);
+    
+    for(Client cliente : sistema.getClienteAtual().getPedidosAprovacao()){
+        tabelaModelo.addRow(new Object[] {cliente.getNickname()});
+    }
+}
+
+public void PrencherAmigos(){
+    DefaultTableModel tabelaModelo = (DefaultTableModel) tAmigo.getModel();
+    tabelaModelo.setRowCount(0);
+    //System.out.println("AAAA " + sistema.getClienteAtual().getListaAmigos());
+    
+    for(Client cliente : sistema.getClienteAtual().getListaAmigos()){
+        tabelaModelo.addRow(new Object[] {cliente.getNickname()});
+    }
+}
+
+public void AtualizarContactos(){
+  
+   contactos.clear();
+    contactos.addAll(sistema.getClienteAtual().getPresenca().keySet());
+    PrencherContactos();
+    hashtable.clear();
+    hashtable.putAll(sistema.getClienteAtual().getPresenca());
+    info.clear();
+    info.addAll(sistema.getClienteAtual().getPresenca().values());
+    
+        
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

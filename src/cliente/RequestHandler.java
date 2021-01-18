@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import static java.lang.Integer.parseInt;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +26,7 @@ public class RequestHandler extends Thread{
     Sistema sistema;
     BufferedReader in;
     PrintWriter out;
+    ArrayList<String> contactos = new ArrayList<String>();
     
     public RequestHandler(Socket ligacao, Sistema sistema){
         this.ligacao = ligacao;
@@ -42,6 +44,8 @@ public class RequestHandler extends Thread{
     
     @Override
     public void run(){
+        contactos.clear();
+        contactos.addAll(sistema.getClienteAtual().getPresenca().keySet());
         try{
             System.out.println("Aceitou ligacao de cliente no endereco " + ligacao.getInetAddress() + " na porta " + ligacao.getPort());
             
@@ -55,11 +59,11 @@ public class RequestHandler extends Thread{
             if(metodo.equals("EnviarPedido")){
                 resposta = "201";
                 String nickname = tokens.nextToken();
-                String email = tokens.nextToken();
-                String curso = tokens.nextToken();
+               // String email = tokens.nextToken();
+                //String curso = tokens.nextToken();
                 String IP = tokens.nextToken();
                 int porta = parseInt(tokens.nextToken());
-                Client cliente = new Client(nickname, email, curso, IP, porta);
+                Client cliente = new Client(nickname, "", "", IP, porta);
                 System.out.println(cliente);
                 
                
@@ -75,11 +79,16 @@ public class RequestHandler extends Thread{
             else if(metodo.equals("ResponderPedido")){
                 resposta = "200";
                 String nickname = tokens.nextToken();
+                //String email = tokens.nextToken();
+               // String curso = tokens.nextToken();
+                String IP = tokens.nextToken();
+                int porta = parseInt(tokens.nextToken());
+                Client cliente = new Client(nickname, "", "", IP, porta);
                 String resposta1 = tokens.nextToken();
                 
-                if(resposta.equals("1")){
-                    for(Client cliente : sistema.getTotalClients().getListaGeralClients()){
-                        if(cliente.getNickname().equals(nickname)){
+                if(resposta1.equals("1")){
+                    for(String s : contactos){
+                        if(s.equals(nickname)){
                             sistema.getClienteAtual().inserirAmigo(cliente);
                             sistema.getClienteAtual().removePedido(cliente);
                         }
