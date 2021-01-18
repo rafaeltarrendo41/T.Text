@@ -16,6 +16,7 @@ public class lista extends javax.swing.JFrame {
 
     private Sistema sistema;
     private IPInfo IPInfo;
+    ServidorSocket servidor = null;
     
     /**
      * Creates new form lista
@@ -23,7 +24,7 @@ public class lista extends javax.swing.JFrame {
     public lista(Sistema sistema) {
         this.sistema = sistema;
         initComponents();
-        System.out.print(sistema.getClienteAtual().getPresenca());
+        System.out.print(sistema.getClienteAtual().getPresenca().keySet());
       
     }
 
