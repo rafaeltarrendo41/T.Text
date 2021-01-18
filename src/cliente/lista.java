@@ -6,6 +6,10 @@
 package cliente;
 
 import Partilhado.IPInfo;
+import java.util.ArrayList;
+import java.util.Set;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,7 +27,11 @@ public class lista extends javax.swing.JFrame {
      */
     public lista(Sistema sistema) {
         this.sistema = sistema;
-        System.out.print(sistema.getClienteAtual().getPresenca().keySet());
+        Set<String> contactos = sistema.getClienteAtual().getPresenca().keySet();
+        
+        Object [] arrayConatcos = contactos.toArray();
+        System.out.println(arrayConatcos.toString());
+        
         servidor = new ServidorSocket(sistema);
         servidor.start();
         initComponents();
@@ -203,7 +211,30 @@ public class lista extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-
+private void PrencherContactos(){
+    DefaultTableModel tabelaModelo = (DefaultTableModel) tContacto.getModel();
+    tabelaModelo.setRowCount(0);
+    
+    ArrayList<Client> amigos = sistema.getClienteAtual().getListaAmigos();
+    
+    //DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+    //dtcr.setHorizontalAlignment(SwingConstants.CENTER);
+    
+    for(Client cliente : sistema.getTotalClients().getListaGeralClients()){
+        if(!sistema.getClienteAtual().equals(cliente)){
+            if(amigos.isEmpty()){
+                tabelaModelo.addRow(new Object[] {cliente.getNickname()});
+            }
+            else{
+                for(Client client : amigos){
+                    if(!(client.equals(cliente))){
+                        tabelaModelo.addRow(new Object[] {cliente.getNickname()});
+                    }
+                }
+            }
+        }
+    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
