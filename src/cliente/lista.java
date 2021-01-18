@@ -23,9 +23,10 @@ public class lista extends javax.swing.JFrame {
      */
     public lista(Sistema sistema) {
         this.sistema = sistema;
-        initComponents();
         System.out.print(sistema.getClienteAtual().getPresenca().keySet());
-      
+        servidor = new ServidorSocket(sistema);
+        servidor.start();
+        initComponents();
     }
 
     /**
