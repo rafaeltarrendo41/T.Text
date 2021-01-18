@@ -50,6 +50,7 @@ public class Login extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         Jcurso = new javax.swing.JTextField();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,10 +109,13 @@ public class Login extends javax.swing.JFrame {
                                     .addComponent(jLabel5))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTextField1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton2))
                                     .addComponent(Jnickname, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
                                     .addComponent(Jemail)
-                                    .addComponent(Jcurso)))
-                            .addComponent(jButton2))
+                                    .addComponent(Jcurso))))
                         .addContainerGap(200, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -143,7 +147,9 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(jLabel5)
                             .addComponent(Jcurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(92, Short.MAX_VALUE))
         );
 
@@ -176,17 +182,16 @@ public class Login extends javax.swing.JFrame {
             try {
                 
                 String ip = InetAddress.getLocalHost().getHostAddress();
-                c = new Client(Jnickname.getText(), Jemail.getText(), Jcurso.getText(), "192.168.1.77", 2002);
+                c = new Client(Jnickname.getText(), Jemail.getText(), Jcurso.getText(), jTextField1.getText(), 1099);
                 sistema.addCliente(c);
-                System.out.println(ip);
+                sistema.setClienteAtual(c);
+                //sistema.getClienteAtual().
+                System.out.println(sistema.getTotalClients());
                 
-                try {
-                    sistema.getClienteAtual().putPresencas(ip);
-                } catch (NotBoundException ex) {
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                lista l = new lista();
+                sistema.getClienteAtual().setNovaPresenca(Jnickname.getText(), jTextField1.getText(), 1099);
+                lista l = new lista(sistema);
                 l.setVisible(true);
+                this.dispose();
             } catch (UnknownHostException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
            
@@ -221,5 +226,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

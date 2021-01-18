@@ -5,6 +5,7 @@
  */
 package cliente;
 
+import Partilhado.IPInfo;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -13,11 +14,17 @@ import javax.swing.table.DefaultTableModel;
  */
 public class lista extends javax.swing.JFrame {
 
+    private Sistema sistema;
+    private IPInfo IPInfo;
+    
     /**
      * Creates new form lista
      */
-    public lista() {
+    public lista(Sistema sistema) {
+        this.sistema = sistema;
         initComponents();
+        System.out.print(sistema.getClienteAtual().getPresenca());
+      
     }
 
     /**

@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cliente;
+package Partilhado;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -14,5 +15,7 @@ import java.util.Vector;
  * @author Rafael
  */
 public interface PresencaInterface extends Remote{
-    public Vector<String> getPresencas(String IPAdress, NovaPresencaInterface c1) throws RemoteException;
+    public Hashtable<String, IPInfo> getPresencas() throws RemoteException;
+    
+    public void setNovaPresenca(String nickname, String IPAdress, int porta) throws RemoteException;
 }

@@ -5,15 +5,23 @@
  */
 package cliente;
 
+import Partilhado.IPInfo;
+import Partilhado.PresencaInterface;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
-import servidor.PresencasServer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+//import servidor.PresencasServer;
 
 /**
  *
@@ -27,6 +35,7 @@ public class Client {
     private ArrayList<Client> pedidosAprovacao;
     String SERVICE_NAME= "/PresencasRemote";
     PresencaInterface presenca = null;
+    Hashtable<String, IPInfo> presentes;
 
     public Client(String nickname, String email, String curso, String IPAdress, int porta) {
         this.nickname = nickname;
@@ -98,23 +107,38 @@ public class Client {
         this.pedidosAprovacao = pedidosAprovacao;
     }
     
-    public void putPresencas(String ip) throws UnknownHostException, NotBoundException{
-        try{
-            NovaPresencaInterface c1 = new NovaPresenca();
-            
+    public void setNovaPresenca(String nickname, String ip, int porta){
+        
+             try{
             presenca = (PresencaInterface) LocateRegistry.getRegistry("127.0.0.1").lookup(SERVICE_NAME);
-            //String ip = InetAddress.getLocalHost().getHostAddress();
-            Vector<String> presencasLista = presenca.getPresencas(ip, c1);
-            
-            Iterator<String> it = presencasLista.iterator();
-            while(it.hasNext()){
-                System.out.println(it.next());
-            }
-        } catch(RemoteException e){
-            System.err.println("Erro");
+            presenca.setNovaPresenca(nickname, IPAdress, porta);
+            System.out.println(presenca);
+             }catch(Exception e){
+                 e.printStackTrace();
+                 System.err.println(e);
+                 
+    }
+    }
+    
+    public Hashtable<String,IPInfo> getPresenca(){
+        try{
+            presenca = (PresencaInterface) LocateRegistry.getRegistry("127.0.0.1").lookup(SERVICE_NAME);
+            presentes = presenca.getPresencas();
+           if(presenca == null){
+               System.out.println("Nada Registado!");
+           } else{
+               System.out.println(presentes.values());
+               
+           }
+        }catch(Exception e){
             e.printStackTrace();
         }
+        return presentes;
     }
+    
+    
+    
+    
 
     @Override
     public String toString() {
