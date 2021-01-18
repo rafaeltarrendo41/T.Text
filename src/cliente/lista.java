@@ -21,20 +21,30 @@ public class lista extends javax.swing.JFrame {
     private Sistema sistema;
     private IPInfo IPInfo;
     ServidorSocket servidor = null;
+    ArrayList<IPInfo> info = new ArrayList<IPInfo>();
+    ArrayList<String> contactos = new ArrayList<String>();
+    
     
     /**
      * Creates new form lista
      */
     public lista(Sistema sistema) {
         this.sistema = sistema;
-        Set<String> contactos = sistema.getClienteAtual().getPresenca().keySet();
-        
+        //Set<String> contactos = sistema.getClienteAtual().getPresenca().keySet();
+        contactos.addAll(sistema.getClienteAtual().getPresenca().keySet());
+        info.addAll(sistema.getClienteAtual().getPresenca().values());
+        System.out.println(info.get(0).getIP());
         Object [] arrayConatcos = contactos.toArray();
         System.out.println(arrayConatcos.toString());
         
         servidor = new ServidorSocket(sistema);
         servidor.start();
         initComponents();
+        
+        PrencherContactos();
+        this.validate();
+        
+        
     }
 
     /**
@@ -89,6 +99,11 @@ public class lista extends javax.swing.JFrame {
         jLabel2.setText("Lista de Contactos:");
 
         jButton2.setText("Adicionar aos amigo");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -200,6 +215,16 @@ public class lista extends javax.swing.JFrame {
         //método terminar que está na classe SISTEMA
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        int linha = tContacto.getSelectedRow();
+        String nickname = tContacto.getModel().getValueAt(linha, 0).toString();
+        
+        
+        String pedido = "EnviarPedido" + " " + sistema.getClienteAtual().getNickname();
+        
+        //for()
+    }//GEN-LAST:event_jButton2MouseClicked
+
    /*  private void TabeleContactos(){
         DefaultTableModel tabelaModelo = (DefaultTableModel) tContacto.getModel();
         tabelaModelo.setRowCount(0);
@@ -220,7 +245,7 @@ private void PrencherContactos(){
     //DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
     //dtcr.setHorizontalAlignment(SwingConstants.CENTER);
     
-    for(Client cliente : sistema.getTotalClients().getListaGeralClients()){
+    /*for(Client cliente : sistema.getTotalClients().getListaGeralClients()){
         if(!sistema.getClienteAtual().equals(cliente)){
             if(amigos.isEmpty()){
                 tabelaModelo.addRow(new Object[] {cliente.getNickname()});
@@ -232,6 +257,11 @@ private void PrencherContactos(){
                     }
                 }
             }
+        }
+    }*/
+    for(String s : contactos){
+        if(!sistema.getClienteAtual().getNickname().equals(s)){
+            tabelaModelo.addRow(new Object[] {s});
         }
     }
 }
