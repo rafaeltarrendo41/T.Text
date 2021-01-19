@@ -134,7 +134,7 @@ public class Client {
     public void setNovaPresenca(String nickname, String ip, int porta){
         
              try{
-            presenca = (PresencaInterface) LocateRegistry.getRegistry("127.0.0.1").lookup(SERVICE_NAME);
+            presenca = (PresencaInterface) LocateRegistry.getRegistry("172.20.10.4").lookup(SERVICE_NAME);
             presenca.setNovaPresenca(nickname, IPAdress, porta);
             System.out.println(presenca);
              }catch(Exception e){
@@ -146,7 +146,7 @@ public class Client {
     
     public Hashtable<String,IPInfo> getPresenca(){
         try{
-            presenca = (PresencaInterface) LocateRegistry.getRegistry("127.0.0.1").lookup(SERVICE_NAME);
+            presenca = (PresencaInterface) LocateRegistry.getRegistry("172.20.10.4").lookup(SERVICE_NAME);
             presentes = presenca.getPresencas();
            if(presenca == null){
                System.out.println("Nada Registado!");
