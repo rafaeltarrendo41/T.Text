@@ -6,6 +6,7 @@
 package cliente;
 
 import static java.lang.Integer.parseInt;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
@@ -199,17 +200,17 @@ public class Login extends javax.swing.JFrame {
         } else {
             try {
                 
-                String ip = InetAddress.getLocalHost().getHostAddress();
-                System.out.println(InetAddress.getLocalHost().getAddress());
+                String ip = Inet4Address.getLocalHost().getHostAddress();
+                //System.out.println(ip);
                 
                 int porta = parseInt(jTextField2.getText());
-                c = new Client(Jnickname.getText(), Jemail.getText(), Jcurso.getText(), jTextField1.getText(), porta);
+                c = new Client(Jnickname.getText(), Jemail.getText(), Jcurso.getText(), ip, porta);
                 sistema.addCliente(c);
                 sistema.setClienteAtual(c);
                 //sistema.getClienteAtual().
                 System.out.println(sistema.getTotalClients());
                 
-                sistema.getClienteAtual().setNovaPresenca(Jnickname.getText(), jTextField1.getText(), porta);
+                sistema.getClienteAtual().setNovaPresenca(Jnickname.getText(), ip, porta);
                 lista l = new lista(sistema);
                 l.setVisible(true);
                 this.dispose();

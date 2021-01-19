@@ -459,7 +459,7 @@ public class lista extends javax.swing.JFrame {
         PrencherContactos();
         PrencherPedidos();
         PrencherAmigos();
-        System.out.println(sistema.getClienteAtual().getListaAmigos());
+        //System.out.println(sistema.getClienteAtual().getListaAmigos());
     }//GEN-LAST:event_jButton5MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -489,8 +489,7 @@ public class lista extends javax.swing.JFrame {
                 entrada.close();
                 saida.close();
                 ligacao.close();
-                Mensagem mensagem1 = new Mensagem(nickname, mensagem);
-                sistema.getClienteAtual().inserirMensagem(mensagem1);
+                
             }catch(Exception e){
                 System.out.print(e);
                 numero++;
@@ -499,7 +498,8 @@ public class lista extends javax.swing.JFrame {
         
         //Feed feed = new Feed(nome, estado);
         //system.getUtilizadorAtual().insereFeed(feed);
-        
+        Mensagem mensagem1 = new Mensagem(nickname, mensagem);
+        sistema.getClienteAtual().inserirMensagem(mensagem1);
         PreencherTabelaMensagens();
         
        
@@ -526,23 +526,8 @@ private void PrencherContactos(){
     
     ArrayList<Client> amigos = sistema.getClienteAtual().getListaAmigos();
     
-    //DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
-    //dtcr.setHorizontalAlignment(SwingConstants.CENTER);
-    
-    /*for(Client cliente : sistema.getTotalClients().getListaGeralClients()){
-        if(!sistema.getClienteAtual().equals(cliente)){
-            if(amigos.isEmpty()){
-                tabelaModelo.addRow(new Object[] {cliente.getNickname()});
-            }
-            else{
-                for(Client client : amigos){
-                    if(!(client.equals(cliente))){
-                        tabelaModelo.addRow(new Object[] {cliente.getNickname()});
-                    }
-                }
-            }
-        }
-    }*/
+    System.out.println(contactos);
+    System.out.println(amigos);
     for(String s : contactos){
         if(!sistema.getClienteAtual().getNickname().equals(s)){
             if(amigos.isEmpty()){
@@ -550,8 +535,8 @@ private void PrencherContactos(){
             }
             else {
                 for(Client cliente : amigos){
-                    if(!(cliente.getNickname().equals(s))){
-                        tabelaModelo.addRow(new Object[] {s});
+                    if(!cliente.getNickname().equals(s)){
+                        tabelaModelo.setRowCount(0);
                     }
                 }
             }
