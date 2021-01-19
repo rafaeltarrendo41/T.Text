@@ -31,6 +31,8 @@ public class Mensagens extends javax.swing.JFrame {
         initComponents();
         contactos.addAll(sistema.getClienteAtual().getPresenca().keySet());
          hashtable.putAll(sistema.getClienteAtual().getPresenca());
+         
+         PreencherTabelaFeed();
     }
 
     /**
@@ -135,7 +137,10 @@ public class Mensagens extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        dispose();
+        
+        this.dispose();
+        lista lista = new lista(sistema);
+        lista.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -165,6 +170,8 @@ public class Mensagens extends javax.swing.JFrame {
                 entrada.close();
                 saida.close();
                 ligacao.close();
+                Mensagem mensagem1 = new Mensagem(nickname, mensagem);
+                sistema.getClienteAtual().inserirMensagem(mensagem1);
             }catch(Exception e){
                 System.out.print(e);
                 numero++;
@@ -173,8 +180,7 @@ public class Mensagens extends javax.swing.JFrame {
         
         //Feed feed = new Feed(nome, estado);
         //system.getUtilizadorAtual().insereFeed(feed);
-        Mensagem mensagem1 = new Mensagem(nickname, mensagem);
-        sistema.getClienteAtual().inserirMensagem(mensagem1);
+        
         PreencherTabelaFeed();
         
         jTextArea1.setText("");
@@ -188,8 +194,8 @@ public class Mensagens extends javax.swing.JFrame {
      */
 
  private void PreencherTabelaFeed(){
-       jTextArea1.selectAll();
-       jTextArea1.replaceSelection("");
+       //jTextArea1.selectAll();
+       //jTextArea1.replaceSelection("");
         
         for(Mensagem feed : sistema.getClienteAtual().getMensagens()){
             jTextArea1.setText(feed.getNickname() + ": " + feed.getMensagem() + "\n");
