@@ -344,7 +344,9 @@ public class lista extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
      servidor.stopRun();
+     sistema.terminar();
      dispose();
+     System.exit(-1);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
@@ -359,8 +361,8 @@ public class lista extends javax.swing.JFrame {
         for(String s : contactos){
             if(s.equals(nickname)){
                 try{
-                    System.out.println(hashtable.get(s).getIP());
-                    System.out.println(hashtable.get(s).getPorta());
+                   // System.out.println(hashtable.get(s).getIP());
+                    //System.out.println(hashtable.get(s).getPorta());
                     Socket ligacao = new Socket(hashtable.get(s).getIP(), hashtable.get(s).getPorta());
                     //System.out.println(ligacao);
                     BufferedReader entrada = new BufferedReader(new InputStreamReader(ligacao.getInputStream()));

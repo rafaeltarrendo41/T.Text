@@ -33,7 +33,7 @@ public class Client {
     private int porta;
     private ArrayList<Client> listaAmigos;
     private ArrayList<Client> pedidosAprovacao;
-    private ArrayList<Estado> estado;
+   
     String SERVICE_NAME= "/PresencasRemote";
     PresencaInterface presenca = null;
     Hashtable<String, IPInfo> presentes;
@@ -127,9 +127,7 @@ public class Client {
         pedidosAprovacao.remove(cliente);
     }
     
-    public void insereEstado(Estado estado){
-        this.estado.add(estado);
-    }
+   
     
     public void setNovaPresenca(String nickname, String ip, int porta){
         

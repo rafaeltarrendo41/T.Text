@@ -104,7 +104,7 @@ public class RequestHandler extends Thread{
                 String estadoFormatado = estados.replaceAll("&nbsp;", " ");
                 Mensagem mensagem1 = new Mensagem(nickname, estadoFormatado);
                 
-                Estado estado = new Estado(nickname, estadoFormatado);
+                Mensagem estado = new Mensagem(nickname, estadoFormatado);
                 sistema.getClienteAtual().inserirMensagem(mensagem1);
                 
                 System.out.println(resposta);
