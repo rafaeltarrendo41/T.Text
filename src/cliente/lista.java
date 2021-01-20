@@ -538,7 +538,7 @@ private void PrencherContactos(){
             else {
                 for(Client cliente : amigos){
                     if(!cliente.getNickname().equals(s)){
-                        tabelaModelo.setRowCount(0);
+                        tabelaModelo.addRow(new Object[] {s});
                     }
                 }
             }
